@@ -1,0 +1,3 @@
+ls *.bam | awk '{print "echo "$1"; samtools view -H "$1" | awk '\''/^@RG/'\''"}' | bash
+
+ls *bam | awk '{print "od -c -N4 "$1""}' | bash

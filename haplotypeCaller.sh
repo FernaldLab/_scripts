@@ -1,0 +1,2 @@
+cd /Users/burtonigenomics/Documents/gatkbp/tophat
+ls | grep ^[ACTG] | awk '{print "java -Xmx4g -jar ../../GenomeAnalysisTK.jar -T HaplotypeCaller -R ../../_Burtoni_genome_files/H_burtoni_v1.assembly.fa -l INFO -I "$1"/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam -o "$1"/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPsHC.vcf --genotyping_mode DISCOVERY -stand_call_conf 30 -stand_emit_conf 50"}'

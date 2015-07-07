@@ -1,0 +1,78 @@
+# modified GATK best practices workflow
+
+
+##### mapping with tophat/bowtie2 #####
+### assume in ~/Documents on burtonigenomics and folders exist for each subject in ~/Documents/gatkbp/tophat
+### Astatotilapia_burtoni.BROADcombo.gtf made in /Volumes/FishStudies/_scripts/combine_ABannoFiles.txt
+
+ls gatkbp/tophat/ | \
+awk '{
+	print "tophat2 --library-type fr-firststrand -o gatkbp/tophat/"$1" -r 0 -p 4 -G _Burtoni_annotations/Astatotilapia_burtoni.BROADcombo.gtf _Burtoni_genome_files/H_burtoni_v1.assembly _LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_"$1"_1_pf.fastq.gz _LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_"$1"_2_pf.fastq.gz"
+	}'
+
+### example call for single subject:
+# tophat2 --library-type fr-firststrand -o gatkbp/tophat/ATCACG -r 0 -p 4 \
+# -G _Burtoni_annotations/Astatotilapia_burtoni.BROADcombo.gtf \
+# _Burtoni_genome_files/H_burtoni_v1.assembly \
+# _LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_1_pf.fastq.gz,_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_2_pf.fastq.gz
+
+## add read group info
+# read group info, format: @RG\tID:group1\tSM:sample1\tPL:illumina\tLB:lib1\tPU:unit1
+# check if @RG tag exists
+#samtools view -H accepted_hits.bam | awk '/^@RG/'
+#ls *.bam | awk '{print "echo "$1"; samtools view -H "$1" | awk '\''/^@RG/'\''"}' | bash
+
+# use picardtools AddOrReplaceReadGroups
+java -Xmx2g -jar picard-tools-1.101/picard-tools-1.101/AddOrReplaceReadGroups.jar \
+INPUT=gatkbp/tophat/ATCACG/accepted_hits.bam \
+OUTPUT=gatkbp/tophat/ATCACG/accepted_hits.RG.bam \
+RGID=ND RGSM=3157 RGPL=illumina RGLB=lib1 RGPU=ATCACG
+
+java -Xmx2g -jar picard-tools-1.101/picard-tools-1.101/AddOrReplaceReadGroups.jar \
+INPUT=gatkbp/tophat/CGATGT/accepted_hits.bam \
+OUTPUT=gatkbp/tophat/CGATGT/accepted_hits.RG.bam \
+RGID=D RGSM=3165 RGPL=illumina RGLB=lib2 RGPU=CGATGT
+
+java -Xmx2g -jar picard-tools-1.101/picard-tools-1.101/AddOrReplaceReadGroups.jar \
+INPUT=gatkbp/tophat/TGACCA/accepted_hits.bam \
+OUTPUT=gatkbp/tophat/TGACCA/accepted_hits.RG.bam \
+RGID=ND RGSM=3677 RGPL=illumina RGLB=lib3 RGPU=TGACCA
+
+java -Xmx2g -jar picard-tools-1.101/picard-tools-1.101/AddOrReplaceReadGroups.jar \
+INPUT=gatkbp/tophat/TTAGGC/accepted_hits.bam \
+OUTPUT=gatkbp/tophat/TTAGGC/accepted_hits.RG.bam \
+RGID=D RGSM=3581 RGPL=illumina RGLB=lib4 RGPU=TTAGGC
+
+# make index files
+ls gatkbp/tophat | awk '{print "samtools index gatkbp/tophat/"$1"/accepted_hits.RG.bam"}' | bash
+ls gatkbp/tophat | awk '{print "samtools idxstats gatkbp/tophat/"$1"/accepted_hits.RG.bam > gatkbp/tophat/"$1"/idxstats.txt"}' | bash
+
+# validate bams
+ls gatkbp/tophat/ | \
+awk '{print "java -Xmx2g -jar picard-tools-1.101/picard-tools-1.101/ValidateSamFile.jar INPUT=gatkbp/tophat/"$1"/accepted_hits.RG.bam OUTPUT= gatkbp/tophat/"$1"/accepted_hits.RG.bam.ValidateSamFile"}' | bash
+	
+	
+##### 
+## dedupping
+
+# make sure bams are coordinate sorted and check first few bytes
+#cd ~/Documents/gatkbp/tophat
+#ls | awk '{print "echo "$1"; samtools view -H "$1"/accepted_hits.RG.bam | awk '\''/^@HD/'\''"}' | bash
+# should be 0000000 037 213 \b 004
+#ls | awk '{print "od -c -N4 "$1"/accepted_hits.RG.bam"}' | bash
+
+
+#READ_NAME_REGEX="[a-zA-Z0-9-]+:[0-9]+:[a-zA-Z0-9]+:[0-9]+:([0-9]+):([0-9]+):([0-9]+)"
+#HWI-ST373:364:C2HRPACXX:6:1105:9298:29400
+# mark duplicates
+#ls | awk '{print "java -Xmx2g -jar ../../picard-tools-1.101/picard-tools-1.101/MarkDuplicates.jar INPUT="$1"/accepted_hits.RG.bam OUTPUT="$1"/accepted_hits.RG.DD.bam METRICS_FILE="$1"/accepted_hits.RG.DD.bam.DDmetrics READ_NAME_REGEX=([a-zA-Z0-9-]+):([0-9]+):([a-zA-Z0-9]+):([0-9]+):([0-9]+):([0-9]+):([0-9]+)"}' | bash
+
+# make new index
+#ls | awk '{print "java -Xmx2g -jar ../../picard-tools-1.101/picard-tools-1.101/BuildBamIndex.jar INPUT="$1"/accepted_hits.RG.DD.bam"}'
+
+#####
+## local realignment around indels
+# generate realignment target regions
+#ls | awk '{print "java -Xmx2g -jar ../../GenomeAnalysisTK-2.8-1-g932cd3a/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ../../_Burtoni_genome_files/H_burtoni_v1.assembly.fa -I "$1"/accepted_hits.RG.DD.bam -o "$1"/forIndelRealigner.intervals"}'
+
+

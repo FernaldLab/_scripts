@@ -1,0 +1,288 @@
+# build genome index with bowtie
+./bowtie2-build -f ../H_burtoni_v1.assembly.fasta ../H_burtoni_v1.assembly
+
+./bowtie2-build -f ../_Burtoni_genome_files/H_burtoni_v1.assembly.padded.fa ../_Burtoni_genome_files/H_burtoni_v1.assembly.padded
+
+# inspect genome index
+./bowtie2-inspect -s ../H_burtoni_v1.assembly
+
+# tophat to align reads
+./tophat2 --library-type fr-firststrand -o tophat_outTGACCA -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TGACCA_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TGACCA_2_pf.fastq.gz
+
+
+# cufflinks to get abundances
+cd tophat_outTGACCA
+cufflinks --library-type fr-firststrand -o cufflinksTGACCA -p 4 -G ../../Astatotilapia_burtoni.BROADAB2.gtf accepted_hits.bam
+
+
+
+###########
+
+./tophat2 --library-type fr-firststrand -o tophat_outATCACG -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outCGATGT -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outTTAGGC -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_2_pf.fastq.gz
+
+cufflinks --library-type fr-firststrand -o cufflinksATCACG -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outATCACG/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksCGATGT -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outCGATGT/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksTTAGGC -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTTAGGC/accepted_hits.bam
+
+
+
+##############
+
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ ./tophat2 --library-type fr-firststrand -o tophat_outTGACCA -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TGACCA_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TGACCA_2_pf.fastq.gz
+
+[2013-10-17 19:10:58] Beginning TopHat run (v2.0.9)
+-----------------------------------------------
+[2013-10-17 19:10:58] Checking for Bowtie
+		  Bowtie version:	 2.1.0.0
+[2013-10-17 19:10:58] Checking for Samtools
+		Samtools version:	 0.1.18.0
+[2013-10-17 19:10:58] Checking for Bowtie index files (genome)..
+[2013-10-17 19:10:58] Checking for reference FASTA file
+[2013-10-17 19:10:58] Generating SAM header for ../_Burtoni_genome_files/H_burtoni_v1.assembly
+	format:		 fastq
+	quality scale:	 phred33 (default)
+[2013-10-17 19:11:05] Reading known junctions from GTF file
+[2013-10-17 19:11:11] Preparing reads
+	 left reads: min. length=101, max. length=101, 76710402 kept reads (227636 discarded)
+[2013-10-17 19:32:49] Building transcriptome data files..
+[2013-10-17 19:33:09] Building Bowtie index from Astatotilapia_burtoni.BROADAB2.fa
+[2013-10-17 19:47:28] Mapping left_kept_reads to transcriptome Astatotilapia_burtoni.BROADAB2 with Bowtie2 
+[2013-10-17 20:49:08] Resuming TopHat pipeline with unmapped reads
+[2013-10-17 20:49:09] Mapping left_kept_reads.m2g_um to genome H_burtoni_v1.assembly with Bowtie2 
+[2013-10-17 22:47:11] Mapping left_kept_reads.m2g_um_seg1 to genome H_burtoni_v1.assembly with Bowtie2 (1/4)
+[2013-10-17 22:58:27] Mapping left_kept_reads.m2g_um_seg2 to genome H_burtoni_v1.assembly with Bowtie2 (2/4)
+[2013-10-17 23:10:18] Mapping left_kept_reads.m2g_um_seg3 to genome H_burtoni_v1.assembly with Bowtie2 (3/4)
+[2013-10-17 23:20:14] Mapping left_kept_reads.m2g_um_seg4 to genome H_burtoni_v1.assembly with Bowtie2 (4/4)
+[2013-10-17 23:35:31] Searching for junctions via segment mapping
+[2013-10-17 23:52:27] Retrieving sequences for splices
+[2013-10-17 23:53:01] Indexing splices
+[2013-10-17 23:54:00] Mapping left_kept_reads.m2g_um_seg1 to genome segment_juncs with Bowtie2 (1/4)
+[2013-10-17 23:59:30] Mapping left_kept_reads.m2g_um_seg2 to genome segment_juncs with Bowtie2 (2/4)
+[2013-10-18 00:04:53] Mapping left_kept_reads.m2g_um_seg3 to genome segment_juncs with Bowtie2 (3/4)
+[2013-10-18 00:10:13] Mapping left_kept_reads.m2g_um_seg4 to genome segment_juncs with Bowtie2 (4/4)
+[2013-10-18 00:15:10] Joining segment hits
+[2013-10-18 00:27:14] Reporting output tracks
+-----------------------------------------------
+[2013-10-18 01:44:51] A summary of the alignment counts can be found in tophat_outTGACCA/align_summary.txt
+[2013-10-18 01:44:51] Run complete: 06:33:53 elapsed
+
+
+
+##########################
+
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ ./tophat2 --library-type fr-firststrand -o tophat_outATCACG -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_2_pf.fastq.gz
+
+[2013-10-19 15:15:00] Beginning TopHat run (v2.0.9)
+-----------------------------------------------
+[2013-10-19 15:15:00] Checking for Bowtie
+
+./tophat2 --library-type fr-firststrand -o tophat_outCGATGT -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outTTAGGC -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_2_pf.fastq.gz
+
+cufflinks --library-type fr-firststrand -o cufflinksATCACG -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outATCACG/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksCGATGT -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outCGATGT/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksTTAGGC -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTTAGGC/acce		  Bowtie version:	 2.1.0.0
+[2013-10-19 15:15:00] Checking for Samtools
+		Samtools version:	 0.1.18.0
+[2013-10-19 15:15:00] Checking for Bowtie index files (genome)..
+[2013-10-19 15:15:00] Checking for reference FASTA file
+[2013-10-19 15:15:00] Generating SAM header for ../_Burtoni_genome_files/H_burtoni_v1.assembly
+	format:		 fastq
+	quality scale:	 phred33 (default)
+[2013-10-19 15:15:01] Reading known junctions from GTF file
+[2013-10-19 15:15:07] Preparing reads
+	 left reads: min. length=101, max. length=101, 77248888 kept reads (228802 discarded)
+[2013-10-19 15:38:25] Building transcriptome data files..
+[2013-10-19 15:38:45] Building Bowtie index from Astatotilapia_burtoni.BROADAB2.fa
+[2013-10-19 15:52:08] Mapping left_kept_reads to transcriptome Astatotilapia_burtoni.BROADAB2 with Bowtie2 
+[2013-10-19 16:55:47] Resuming TopHat pipeline with unmapped reads
+[2013-10-19 16:55:47] Mapping left_kept_reads.m2g_um to genome H_burtoni_v1.assembly with Bowtie2 
+[2013-10-19 18:52:29] Mapping left_kept_reads.m2g_um_seg1 to genome H_burtoni_v1.assembly with Bowtie2 (1/4)
+[2013-10-19 19:02:50] Mapping left_kept_reads.m2g_um_seg2 to genome H_burtoni_v1.assembly with Bowtie2 (2/4)
+[2013-10-19 19:13:42] Mapping left_kept_reads.m2g_um_seg3 to genome H_burtoni_v1.assembly with Bowtie2 (3/4)
+[2013-10-19 19:23:53] Mapping left_kept_reads.m2g_um_seg4 to genome H_burtoni_v1.assembly with Bowtie2 (4/4)
+[2013-10-19 19:37:15] Searching for junctions via segment mapping
+[2013-10-19 19:52:53] Retrieving sequences for splices
+[2013-10-19 19:53:26] Indexing splices
+[2013-10-19 19:54:21] Mapping left_kept_reads.m2g_um_seg1 to genome segment_juncs with Bowtie2 (1/4)
+[2013-10-19 19:58:34] Mapping left_kept_reads.m2g_um_seg2 to genome segment_juncs with Bowtie2 (2/4)
+[2013-10-19 20:02:37] Mapping left_kept_reads.m2g_um_seg3 to genome segment_juncs with Bowtie2 (3/4)
+[2013-10-19 20:06:40] Mapping left_kept_reads.m2g_um_seg4 to genome segment_juncs with Bowtie2 (4/4)
+[2013-10-19 20:11:48] Joining segment hits
+[2013-10-19 20:23:19] Reporting output tracks
+-----------------------------------------------
+[2013-10-19 21:38:43] A summary of the alignment counts can be found in tophat_outATCACG/align_summary.txt
+[2013-10-19 21:38:43] Run complete: 06:23:43 elapsed
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ 
+./tophat2 --library-type fr-firststrand -o tophat_outCGATGT -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outTTAGGC -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_2_pf.fastq.gz
+
+cufflinks --library-type fr-firststrand -o cufflinksATCACG -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outATCACG/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksCGATGT -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outCGATGT/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksTTAGGC -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTTAGGC/acceptbio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ ./tophat2 --library-type fr-firststrand -o tophat_outCGATGT -_0364_AC2HRPACXX_L6_CGATGT_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_2_pf.fastq.gzeq/130913_LYNLEY 
+
+./tophat2 --library-type fr-firststrand -o tophat_outTTAGGC -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_2_pf.fastq.gz
+
+cufflinks --library-type fr-firststrand -o cufflinksATCACG -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outATCACG/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksCGATGT -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outCGATGT/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksTTAGGC -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTTAGGC/accepted_hits.bam
+
+[2013-10-19 21:38:45] Beginning TopHat run (v2.0.9)
+-----------------------------------------------
+[2013-10-19 21:38:45] Checking for Bowtie
+		  Bowtie version:	 2.1.0.0
+[2013-10-19 21:38:45] Checking for Samtools
+		Samtools version:	 0.1.18.0
+[2013-10-19 21:38:45] Checking for Bowtie index files (genome)..
+[2013-10-19 21:38:45] Checking for reference FASTA file
+[2013-10-19 21:38:45] Generating SAM header for ../_Burtoni_genome_files/H_burtoni_v1.assembly
+	format:		 fastq
+	quality scale:	 phred33 (default)
+[2013-10-19 21:39:02] Reading known junctions from GTF file
+[2013-10-19 21:39:08] Preparing reads
+	 left reads: min. length=101, max. length=101, 83206291 kept reads (246261 discarded)
+[2013-10-19 22:03:59] Building transcriptome data files..
+[2013-10-19 22:04:22] Building Bowtie index from Astatotilapia_burtoni.BROADAB2.fa
+[2013-10-19 22:18:21] Mapping left_kept_reads to transcriptome Astatotilapia_burtoni.BROADAB2 with Bowtie2 
+[2013-10-19 23:24:54] Resuming TopHat pipeline with unmapped reads
+[2013-10-19 23:24:54] Mapping left_kept_reads.m2g_um to genome H_burtoni_v1.assembly with Bowtie2 
+[2013-10-20 01:40:54] Mapping left_kept_reads.m2g_um_seg1 to genome H_burtoni_v1.assembly with Bowtie2 (1/4)
+[2013-10-20 01:52:47] Mapping left_kept_reads.m2g_um_seg2 to genome H_burtoni_v1.assembly with Bowtie2 (2/4)
+[2013-10-20 02:05:12] Mapping left_kept_reads.m2g_um_seg3 to genome H_burtoni_v1.assembly with Bowtie2 (3/4)
+[2013-10-20 02:18:44] Mapping left_kept_reads.m2g_um_seg4 to genome H_burtoni_v1.assembly with Bowtie2 (4/4)
+[2013-10-20 02:38:29] Searching for junctions via segment mapping
+[2013-10-20 02:59:26] Retrieving sequences for splices
+[2013-10-20 02:59:58] Indexing splices
+[2013-10-20 03:00:55] Mapping left_kept_reads.m2g_um_seg1 to genome segment_juncs with Bowtie2 (1/4)
+[2013-10-20 03:07:24] Mapping left_kept_reads.m2g_um_seg2 to genome segment_juncs with Bowtie2 (2/4)
+[2013-10-20 03:13:56] Mapping left_kept_reads.m2g_um_seg3 to genome segment_juncs with Bowtie2 (3/4)
+[2013-10-20 03:20:31] Mapping left_kept_reads.m2g_um_seg4 to genome segment_juncs with Bowtie2 (4/4)
+[2013-10-20 03:27:05] Joining segment hits
+[2013-10-20 03:41:32] Reporting output tracks
+-----------------------------------------------
+[2013-10-20 05:10:32] A summary of the alignment counts can be found in tophat_outCGATGT/align_summary.txt
+[2013-10-20 05:10:32] Run complete: 07:31:47 elapsed
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ 
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ ./tophat2 --library-type fr-firststrand -o tophat_outTTAGGC -r 0 -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_2_pf.fastq.gz
+
+[2013-10-20 05:10:33] Beginning TopHat run (v2.0.9)
+-----------------------------------------------
+[2013-10-20 05:10:33] Checking for Bowtie
+		  Bowtie version:	 2.1.0.0
+[2013-10-20 05:10:34] Checking for Samtools
+		Samtools version:	 0.1.18.0
+[2013-10-20 05:10:34] Checking for Bowtie index files (genome)..
+[2013-10-20 05:10:34] Checking for reference FASTA file
+[2013-10-20 05:10:34] Generating SAM header for ../_Burtoni_genome_files/H_burtoni_v1.assembly
+	format:		 fastq
+	quality scale:	 phred33 (default)
+[2013-10-20 05:10:48] Reading known junctions from GTF file
+[2013-10-20 05:10:54] Preparing reads
+	 left reads: min. length=101, max. length=101, 74970487 kept reads (219009 discarded)
+[2013-10-20 05:33:00] Building transcriptome data files..
+[2013-10-20 05:33:20] Building Bowtie index from Astatotilapia_burtoni.BROADAB2.fa
+[2013-10-20 05:47:22] Mapping left_kept_reads to transcriptome Astatotilapia_burtoni.BROADAB2 with Bowtie2 
+[2013-10-20 06:47:33] Resuming TopHat pipeline with unmapped reads
+[2013-10-20 06:47:33] Mapping left_kept_reads.m2g_um to genome H_burtoni_v1.assembly with Bowtie2 
+[2013-10-20 08:41:49] Mapping left_kept_reads.m2g_um_seg1 to genome H_burtoni_v1.assembly with Bowtie2 (1/4)
+[2013-10-20 08:53:24] Mapping left_kept_reads.m2g_um_seg2 to genome H_burtoni_v1.assembly with Bowtie2 (2/4)
+[2013-10-20 09:04:53] Mapping left_kept_reads.m2g_um_seg3 to genome H_burtoni_v1.assembly with Bowtie2 (3/4)
+[2013-10-20 09:14:43] Mapping left_kept_reads.m2g_um_seg4 to genome H_burtoni_v1.assembly with Bowtie2 (4/4)
+[2013-10-20 09:31:05] Searching for junctions via segment mapping
+[2013-10-20 09:46:11] Retrieving sequences for splices
+[2013-10-20 09:46:43] Indexing splices
+[2013-10-20 09:47:40] Mapping left_kept_reads.m2g_um_seg1 to genome segment_juncs with Bowtie2 (1/4)
+[2013-10-20 09:52:45] Mapping left_kept_reads.m2g_um_seg2 to genome segment_juncs with Bowtie2 (2/4)
+[2013-10-20 09:57:36] Mapping left_kept_reads.m2g_um_seg3 to genome segment_juncs with Bowtie2 (3/4)
+[2013-10-20 10:01:40] Mapping left_kept_reads.m2g_um_seg4 to genome segment_juncs with Bowtie2 (4/4)
+[2013-10-20 10:06:13] Joining segment hits
+[2013-10-20 10:19:08] Reporting output tracks
+-----------------------------------------------
+[2013-10-20 11:32:56] A summary of the alignment counts can be found in tophat_outTTAGGC/align_summary.txt
+[2013-10-20 11:32:56] Run complete: 06:22:22 elapsed
+
+
+
+
+
+
+############################
+
+
+
+
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ cufflinks --library-type fr-firststrand -o cufflinksATCACG -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outATCACG/accepted_hits.bam
+Warning: Your version of Cufflinks is not up-to-date. It is recommended that you upgrade to Cufflinks v2.1.1 to benefit from the most recent features and bug fixes (http://cufflinks.cbcb.umd.edu).
+[11:32:57] Loading reference annotation.
+[11:33:03] Inspecting reads and determining fragment length distribution.
+> Processed 24597 loci.                        [*************************] 100%
+> Map Properties:
+>	Normalized Map Mass: 66884225.17
+>	Raw Map Mass: 66884225.17
+>	Fragment Length Distribution: Truncated Gaussian (default)
+>	              Default Mean: 200
+>	           Default Std Dev: 80
+[11:38:38] Estimating transcript abundances.
+> Processed 24597 loci.                        [*************************] 100%
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ 
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ cufflinks --library-type fr-firststrand -o cufflinksCGATGT -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outCGATGT/accepted_hits.bam
+Warning: Your version of Cufflinks is not up-to-date. It is recommended that you upgrade to Cufflinks v2.1.1 to benefit from the most recent features and bug fixes (http://cufflinks.cbcb.umd.edu).
+[12:02:56] Loading reference annotation.
+[12:03:03] Inspecting reads and determining fragment length distribution.
+> Processed 24597 loci.                        [*************************] 100%
+> Map Properties:
+>	Normalized Map Mass: 68324240.11
+>	Raw Map Mass: 68324240.11
+>	Fragment Length Distribution: Truncated Gaussian (default)
+>	              Default Mean: 200
+>	           Default Std Dev: 80
+[12:09:17] Estimating transcript abundances.
+> Processed 24597 loci.                        [*************************] 100%
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ 
+bio-rdf02:tophat-2.0.9.OSX_x86_64 burtonigenomics$ cufflinks --library-type fr-firststrand -o cufflinksTTAGGC -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTTAGGC/accepted_hits.bam
+Warning: Your version of Cufflinks is not up-to-date. It is recommended that you upgrade to Cufflinks v2.1.1 to benefit from the most recent features and bug fixes (http://cufflinks.cbcb.umd.edu).
+[12:34:00] Loading reference annotation.
+[12:34:07] Inspecting reads and determining fragment length distribution.
+> Processed 24597 loci.                        [*************************] 100%
+> Map Properties:
+>	Normalized Map Mass: 63635574.95
+>	Raw Map Mass: 63635574.95
+>	Fragment Length Distribution: Truncated Gaussian (default)
+>	              Default Mean: 200
+>	           Default Std Dev: 80
+[12:41:31] Estimating transcript abundances.
+> Processed 24597 loci.                        [*************************] 100%
+
+######################
+####################
+
+
+./tophat2 --library-type fr-firststrand -o tophat_outTGACCAnoGTF -r 0 -p 4 ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TGACCA_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TGACCA_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outATCACGnoGTF -r 0 -p 4 ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_ATCACG_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outCGATGTnoGTF -r 0 -p 4 ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_CGATGT_2_pf.fastq.gz
+
+./tophat2 --library-type fr-firststrand -o tophat_outTTAGGCnoGTF -r 0 -p 4 ../_Burtoni_genome_files/H_burtoni_v1.assembly ../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_1_pf.fastq.gz,../_LYNLEY_RNAseq/130913_LYNLEY_0364_AC2HRPACXX_L6_TTAGGC_2_pf.fastq.gz
+
+cufflinks --library-type fr-firststrand -o cufflinksTGACCAnoGTF -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTGACCAnoGTF/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksATCACGnoGTF -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outATCACGnoGTF/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksCGATGTnoGTF -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outCGATGTnoGTF/accepted_hits.bam
+
+cufflinks --library-type fr-firststrand -o cufflinksTTAGGCnoGTF -p 4 -G ../Astatotilapia_burtoni.BROADAB2.gtf tophat_outTTAGGCnoGTF/accepted_hits.bam

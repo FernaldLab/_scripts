@@ -1,0 +1,27 @@
+cd /Volumes/FishStudies/_LYNLEY_RNAseq/cuffdiff
+awk '{print $1}' cuffdiffOUT_markedDuplicates/gene_exp.diff.significant > blahd
+awk '{print $1}' cuffdiffOUT/gene_exp.diff.significant > blah
+comm blah blahd > blahcom
+
+awk 'BEGIN {
+			FS="\t";print "ab.gene\tblah_only\tblahd_only\tboth"
+			}
+	{
+		if (NF==1) {
+			print ""$1"\tT\t-\t-"
+		} 
+		else if (NF==2) {
+			print ""$2"\t-\tT\t-"
+		} 
+		else {
+			print ""$3"\t-\t-\tT"
+		}
+	}' blahcom > blahcom2
+	
+awk '$4=="T" {print $1}' blahcom2 > genes.common
+
+awk 'FNR==NR {a[$1]=$1; next} $1 in a {print $0}' \
+genes.common cuffdiffOUT/gene_exp.diff.significant > cuffdiffOUT/gene_exp.diff.significant.common
+
+awk '{split($4,a,":"); split(a[2],aa,"-"); print ""a[1]"\t"aa[1]"\t"aa[2]"\t"$1"\t"$8"\t"$9"\t"$12"\t"$13""}' \
+cuffdiffOUT/gene_exp.diff.significant.common > cuffdiffOUT/gene_exp.diff.significant.common.bed

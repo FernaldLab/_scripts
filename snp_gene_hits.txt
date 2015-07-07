@@ -1,0 +1,30 @@
+#cd /Volumes/fishstudies/_gatkbp_backup/tophat
+
+# get gene hits
+ls | while read stdin; \
+do echo $stdin; \
+bedtools intersect \
+-a $stdin/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf \
+-b ../../_Burtoni_annotations/Astatotilapia_burtoni.BROADAB2fix.geneNames.gtf \
+-wo \
+> $stdin/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf.geneNames.gtf.hits; \
+done
+
+# get unique genes
+## be aware of blank and NONE" for unannotated genes
+# ls | while read stdin; \
+# do echo $stdin; \
+# #awk 'BEGIN{FS="\t"} {split($19, a, ";"); split(a[2], aa, "_"); if (aa[3]!="" && aa[3]!="NONE\"") print aa[3]}' \
+# awk 'BEGIN{FS="\t"} {split($19, a, ";"); split(a[2], aa, "\""); print a[1]"\t"aa[2]}' \
+# $stdin/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf.geneNames.gtf.hits | \
+# sort | \
+# uniq \
+# > $stdin/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf.geneNames.gtf.hits_uniqGenes; \
+# done
+# 
+# # get genes shared in ND samples (ATCACG, TGACCA)
+# comm -1 -2 \
+# ATCACG/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf.geneNames.gtf.hits_uniqGenes \
+# TGACCA/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf.geneNames.gtf.hits_uniqGenes \
+# > accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf.geneNames.gtf.hits_uniqGenesND
+

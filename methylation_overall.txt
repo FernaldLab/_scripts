@@ -1,0 +1,82 @@
+cd /Volumes/fishstudies/_methylation
+
+# convert wig files to bed
+#ls | grep wig$ | \
+#awk '{print "wig2bed < "$1" > "$1".bed"}'
+
+### get overlap with different features ###
+## exons ##
+echo GTF-exons
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/Astatotilapia_burtoni.BROADAB2fix.gtf -wao > "$1"-GTF"}'
+
+## UTRs ##
+echo GFF-UTRs
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/Astatotilapia_burtoni.BROADAB1.UTRs.gff3 -wao > "$1"-UTRs"}'
+
+## lncs ##
+echo lncs
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/abur.lnc.final.gtf -wao > "$1"-lncRNAs"}'
+
+## transposons ##
+echo TEs
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/Abur_final_TE.bed -wao > "$1"-TEs"}'
+
+## miRNAs ##
+echo miRNAs
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/abur_miRNAs-130326.bed -wao > "$1"-miRNAs"}'
+
+## CNV ##
+echo CNV
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/Burtoni_cnv_final.out.bed -wao > "$1"-CNVs"}'
+
+## Assembly SNPs ##
+echo Assembly_SNPs
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/Assembly_SNPs.noHeader.gff3 -wao > "$1"-SNPs_assembly"}'
+
+## microsatellites ##
+echo microsatellites
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_Burtoni_annotations/microsatellites.noHeader.gff3 -wao > "$1"-microsatellites"}'
+
+## DE ##
+echo cuffdiff_postRealign_bqsr_fa
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_gatkbp_backup/cuffdiff_postRealign_bqsr_fa/gene_exp.diff.sig.bed -wao > "$1"-cuffdiff_postRealign_bqsr_fa"}'
+
+echo cuffdiff_postRealign_bqsr_fa_FDR.1
+ls | grep wig.bed$ | \
+awk '{print "echo "$1"; bedtools intersect -a "$1" -b ../_gatkbp_backup/cuffdiff_postRealign_bqsr_fa_FDR.1/gene_exp.diff.sig.bed -wao > "$1"-cuffdiff_postRealign_bqsr_fa_FDR.1"}'
+
+## SNPs ##
+echo individual_SNPs
+
+echo 3157
+bedtools intersect -a 3157.wig.bed -b ../_gatkbp_backup/ATCACG/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf -wao > 3157.wig.bed-SNPs_realign_BQSR
+
+echo 3165
+bedtools intersect -a 3165.wig.bed -b ../_gatkbp_backup/CGATGT/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf -wao > 3165.wig.bed-SNPs_realign_BQSR
+
+echo 3677
+bedtools intersect -a 3677.wig.bed -b ../_gatkbp_backup/TGACCA/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf -wao > 3677.wig.bed-SNPs_realign_BQSR
+
+echo 3581
+bedtools intersect -a 3581.wig.bed -b ../_gatkbp_backup/TTAGGC/accepted_hits.RG.DD.reorderSam.realign.BQSR.bam.SNPs.vcf -wao > 3581.wig.bed-SNPs_realign_BQSR
+
+################################
+## get overlap with comboGTF
+#ls | grep wig.bed$ | \
+#awk '{print "bedtools intersect -a "$1" -b ../_Burtoni_annotations/Astatotilapia_burtoni.BROADcombo.gtf -wao > "$1".comboGTFoverlap"}'
+
+## filter to hits
+#ls | grep comboGTFoverlap$ | awk '{print "awk '\''\$NF>0'\'' "$1" > "$1".hit"}'
+
+## trim columns
+#ls | grep hit$ | \
+#awk '{print "awk '\''{print \"\"\$1\"\\t\"\$2\"\\t\"\$3\"\\t\"\$5\"\\t\"\$8\"\\t\"\$9\"\\t\"\$10\"\\t\"\$11\"\"}'\'' "$1" > "$1"TrimCols"}'

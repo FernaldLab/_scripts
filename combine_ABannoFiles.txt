@@ -1,0 +1,19 @@
+# combine annotation information into one gtf
+cd ~/Documents/_Fernald_lab/_Burtoni_annotations
+
+# prep bed files to cat with gtf's and gff
+awk '{s=$2+1; print ""$1"\tBROAD\t"$4"\t"s"\t"$3"\t"$5"\t"$6"\t.\t."}' Abur_final_TE.bed > Abur_final_TE.gtf
+awk '{s=$2+1; print ""$1"\tR.Alcazar\tmiRNA\t"s"\t"$3"\t"$5"\t"$6"\t.\tmiRNA_id "$4""}' abur_miRNAs-130326.bed > abur_miRNAs-130326.gtf
+awk '{s=$2+1; print ""$1"\tBROAD\tcnv\t"s"\t"$3"\t.\t.\t.\t."}' Burtoni_cnv_final.out.bed > Burtoni_cnv_final.out.gtf
+
+cat \
+Astatotilapia_burtoni.BROADAB2fix.gtf \
+abur.lnc.final.gtf \
+Astatotilapia_burtoni.BROADAB1.UTRs.gff3 \
+Abur_final_TE.gtf \
+abur_miRNAs-130326.gtf \
+Assembly_SNPs.noHeader.gff3 \
+Burtoni_cnv_final.out.gtf > Astatotilapia_burtoni.BROADcombo.gtf
+
+# check line numbers are correct
+ls *.g* | awk '{print "echo "$1"; awk '\''END{print NR}'\'' "$1""}' | bash
